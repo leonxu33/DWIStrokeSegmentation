@@ -22,7 +22,7 @@ dcm_dir = args.dcm_path
 
 def preprocess_data(img_arr, mask=True):
     target_size = (256, 256)
-    img_arr = resize(img_arr, target_size, anti_aliasing=True)
+    img_arr = resize(img_arr, target_size)
     if mask:
         img_arr = (img_arr > np.min(img_arr)).astype(int)
     if (img_arr.shape != target_size):
