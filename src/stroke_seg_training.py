@@ -12,9 +12,12 @@ ext_data = 'npy'
 chkpt_dir = '../ckpt/'
 filename_checkpoint = os.path.join(chkpt_dir, 'stroke.ckpt')
 batch_size = 32
+keras_memory = 0.4
 
 if not os.path.isdir(chkpt_dir):
     os.mkdir(chkpt_dir)
+
+setKerasMemory(keras_memory)
 
 model = deepEncoderDecoder(num_channel_input = 1,
                         num_channel_output = 1,
