@@ -1,0 +1,5 @@
+*.dcm
+__pycache__/*
+.idea/
+data/
+data/*

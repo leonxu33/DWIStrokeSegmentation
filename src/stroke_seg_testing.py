@@ -41,22 +41,22 @@ print(np.sum(test_input))
 print(test_input.shape)
 print(test_mask.shape)
 
-# model = deepEncoderDecoder(num_channel_input = num_channel_input,
-#                         num_channel_output = num_channel_output,
-#                         img_rows = img_rows,
-#                         img_cols = img_cols,
-#                         lr_init = lr_init,
-#                         num_poolings = num_poolings,
-#                         num_conv_per_pooling = num_conv_per_pooling,
-#                         with_bn = with_batch_norm, verbose=1)
-# print('train model:', filename_checkpoint)
-# print('parameter count:', model.count_params())
-#
-# model.load_weights(filename_checkpoint)
-# print('model load from' + filename_checkpoint)
-#
-# metrics = model.evaluate(test_input, test_mask, batch_size=batch_size)
-# data_test_output = model.predict(test_input, batch_size=batch_size)
-# data_test_output_thres = np.around(test_input, decimals=0)
-#
-# print(metrics)
+model = deepEncoderDecoder(num_channel_input = num_channel_input,
+                        num_channel_output = num_channel_output,
+                        img_rows = img_rows,
+                        img_cols = img_cols,
+                        lr_init = lr_init,
+                        num_poolings = num_poolings,
+                        num_conv_per_pooling = num_conv_per_pooling,
+                        with_bn = with_batch_norm, verbose=1)
+print('train model:', filename_checkpoint)
+print('parameter count:', model.count_params())
+
+model.load_weights(filename_checkpoint)
+print('model load from' + filename_checkpoint)
+
+metrics = model.evaluate(test_input, test_mask, batch_size=batch_size)
+data_test_output = model.predict(test_input, batch_size=batch_size)
+data_test_output_thres = np.around(test_input, decimals=0)
+
+print(metrics)

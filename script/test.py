@@ -4,16 +4,16 @@ import h5py
 import matplotlib.pyplot as plt
 
 print("Start...")
-path = '../data/test/335_20.npy'
+path = '../data/training/100_20.npy'
 sample = np.load(path).item()
 file_path = "../../24H_DWI_D3/24H_DWI_D3/335/335/IM-0302-0020.dcm"
 ds = pd.read_file(file_path)
-arr = np.squeeze(sample['input'], axis=2)
-h5f = h5py.File('new.h5', 'w')
-h5f.create_dataset('mask', data=arr)
-h5f.close()
-h5f = h5py.File('new.h5', 'r')
-a = h5f['mask']
+arr = np.squeeze(sample['output'], axis=2)
+# h5f = h5py.File('new.h5', 'w')
+# h5f.create_dataset('mask', data=arr)
+# h5f.close()
+# h5f = h5py.File('new.h5', 'r')
+# a = h5f['mask']
 plt.imshow(arr, cmap=plt.cm.Greys)
 plt.show()
 print(np.sum(ds.pixel_array))

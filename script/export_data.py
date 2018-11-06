@@ -74,10 +74,11 @@ for id in valid_set:
             if ".dcm" in filename.lower():
                 filepath = os.path.join(maindir, filename)
                 RefDs = pd.read_file(filepath)
-                img_arr = preprocess_data(RefDs.pixel_array)
                 if "SliceLocation" in RefDs:
+                    img_arr = preprocess_data(RefDs.pixel_array, mask=False)
                     dict['input'].append(img_arr)
                 else:
+                    img_arr = preprocess_data(RefDs.pixel_array, mask=True)
                     dict['output'].append(img_arr)
     for i in range(len(dict['input'])):
         dict_i = {'input': dict['input'][i], 'output': dict['output'][i]}
@@ -91,11 +92,11 @@ for id in training_set:
             if ".dcm" in filename.lower():
                 filepath = os.path.join(maindir, filename)
                 RefDs = pd.read_file(filepath)
-                img_arr = preprocess_data(RefDs.pixel_array)
                 if "SliceLocation" in RefDs:
+                    img_arr = preprocess_data(RefDs.pixel_array, mask=False)
                     dict['input'].append(img_arr)
                 else:
-                    img_arr = np.around(img_arr, decimals=0).astype(int)
+                    img_arr = preprocess_data(RefDs.pixel_array, mask=True)
                     dict['output'].append(img_arr)
     for i in range(len(dict['input'])):
         dict_i = {'input': dict['input'][i], 'output': dict['output'][i]}
