@@ -17,22 +17,13 @@ keras_memory = 0.4
 if not os.path.isdir(chkpt_dir):
     os.mkdir(chkpt_dir)
 
-setKerasMemory(keras_memory)
-
-model = deepEncoderDecoder(num_channel_input = 1,
-                        num_channel_output = 1,
-                        img_rows = 256,
-                        img_cols = 256,
-                        lr_init = 0.0002,
-                        num_poolings = 3,
-                        num_conv_per_pooling = 3,
-                        with_bn = True, verbose=1)
+model = transfer_FCN_Vgg16()
 
 params_generator = {'dim_x': 256,
           'dim_y': 256,
           'dim_z': 1,
           'dim_output': 1,
-          'batch_size': 4,
+          'batch_size': batch_size,
           'shuffle': True,
           'verbose': 0,
           'scale_data': 1.0,
@@ -57,7 +48,6 @@ history = model.fit_generator(
                     epochs=50,
                     callbacks=[model_checkpoint],
                     validation_data=validation_generator,
-                    validation_steps=len(list_valid_files)/batch_size,
-                    max_q_size=16)
+                    validation_steps=len(list_valid_files)/batch_size)
 
 print(history)
