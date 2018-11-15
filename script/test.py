@@ -2,36 +2,32 @@ import numpy as np
 import pydicom as pd
 import h5py
 import matplotlib.pyplot as plt
+import os
 
 print("Start...")
-path = '../data/training/100_20.npy'
-sample = np.load(path).item()
-file_path = "../../24H_DWI_D3/24H_DWI_D3/335/335/IM-0302-0020.dcm"
-ds = pd.read_file(file_path)
-arr = np.squeeze(sample['output'], axis=2)
-# h5f = h5py.File('new.h5', 'w')
-# h5f.create_dataset('mask', data=arr)
-# h5f.close()
-# h5f = h5py.File('new.h5', 'r')
-# a = h5f['mask']
-plt.imshow(arr, cmap=plt.cm.Greys)
-plt.show()
-print(np.sum(ds.pixel_array))
-print(np.max(ds.pixel_array))
-print(np.min(ds.pixel_array))
-print(ds.pixel_array.shape)
-print(arr.shape)
-ds.PixelData = arr.tobytes()
-ds.Rows = 256
-ds.Columns = 256
-ds.save_as("new.dcm")
-# print(sample['input'])
-# print(np.sum(sample['input']))
-# print(np.min(sample['input']))
-# print(np.max(sample['input']))
-# print(sample['output'])
-print(np.sum(sample['output']))
-print(np.max(sample['output']))
-print(np.min(sample['output']))
-# print(np.unique(sample['output']))
+path = '../data/result/output.npy'
+test_path = '../data/test/'
+sample = np.load(path)
+print(sample.shape)
+mask_name = []
+for maindir, subdirlist, filelist in os.walk(test_path, topdown=False):
+    for filename in sorted(filelist):
+        if ".npy" in filename.lower():
+            mask_name.append(filename.split('.')[0])
+for i in range(sample.shape[0]):
+	img = np.squeeze(sample[i], axis=2)
+	plt.imsave(os.path.join('../data/result/', mask_name[i]+'.png'), img)
+# path = '../data/test/'
+# ck = '../data/ck/'
+# if not os.path.isdir(ck):
+# 	os.mkdir(ck)
+
+# for maindir, subdirlist, filelist in os.walk(path, topdown=False):
+#     for filename in filelist:
+#         if ".npy" in filename.lower():
+#             filepath = os.path.join(maindir, filename)
+#             data = np.load(filepath).item()
+#             plt.imsave(os.path.join(ck, filename.split('.')[0]+'_img.png'), np.squeeze(data['input'], axis=2))
+#             plt.imsave(os.path.join(ck, filename.split('.')[0]+'_mask.png'), np.squeeze(data['output'], axis=2))
+
 print("Done")
