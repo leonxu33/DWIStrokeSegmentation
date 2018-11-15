@@ -3,7 +3,7 @@ from keras.callbacks import ModelCheckpoint
 from keras.optimizers import Adam
 import os
 from DataGenerator import *
-from unet import *
+from models import *
 
 dir_samples = '../data/'
 training_dir = os.path.join(dir_samples, 'training')
@@ -37,8 +37,8 @@ validation_generator = DataGenerator(**params_generator).generate(valid_dir, lis
 
 list_hyper_parameters = [{'lr': 0.0002, 'epochs': 100}]
 type_activation_output = 'sigmoid'
-if os.path.isfile(filename_checkpoint):
-    model.load_weights(filename_checkpoint)
+# if os.path.isfile(filename_checkpoint):
+#     model.load_weights(filename_checkpoint)
 model_checkpoint = ModelCheckpoint(filename_checkpoint, monitor='val_loss', save_best_only=True)
 
 print('Fit generator...')

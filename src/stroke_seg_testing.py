@@ -1,6 +1,6 @@
 import numpy as np
 import os
-from unet import *
+from models import *
 
 img_rows = 256
 img_cols = 256
@@ -16,9 +16,13 @@ num_channel_input = 1
 num_channel_output = 1
 filename_checkpoint = '../ckpt/stroke.ckpt'
 test_dir = '../data/test/'
+result_dir = '../data/result'
 
 list_test_input = []
 list_test_mask = []
+
+if not os.path.isdir(result_dir):
+    os.mkdir(result_dir)
 
 for maindir, subdirlist, filelist in os.walk(test_dir, topdown=False):
     for filename in filelist:
@@ -41,14 +45,8 @@ print(np.sum(test_input))
 print(test_input.shape)
 print(test_mask.shape)
 
-model = deepEncoderDecoder(num_channel_input = num_channel_input,
-                        num_channel_output = num_channel_output,
-                        img_rows = img_rows,
-                        img_cols = img_cols,
-                        lr_init = lr_init,
-                        num_poolings = num_poolings,
-                        num_conv_per_pooling = num_conv_per_pooling,
-                        with_bn = with_batch_norm, verbose=1)
+model = transfer_FCN_Vgg16()
+
 print('train model:', filename_checkpoint)
 print('parameter count:', model.count_params())
 
@@ -58,5 +56,7 @@ print('model load from' + filename_checkpoint)
 metrics = model.evaluate(test_input, test_mask, batch_size=batch_size)
 data_test_output = model.predict(test_input, batch_size=batch_size)
 data_test_output_thres = np.around(test_input, decimals=0)
+
+np.save(os.path.join(result_dir, 'ouput.npy'), data_test_output)
 
 print(metrics)
