@@ -1,0 +1,10 @@
+*.dcm
+__pycache__/
+__pycache__/*
+.idea/
+data/
+data/*
+dataset/*
+dataset/
+src/__pycache__/*
+src/__pycache__
