@@ -86,7 +86,7 @@ def output_data(dataset, dir):
         print("Loading: {0}, num_sample = ({1}, {2})".format(id, len(cleaned_dict['input']), len(cleaned_dict['output'])))
         for i in range(len(cleaned_dict['input'])):
             dict_i = {'input': cleaned_dict['input'][i], 'output': cleaned_dict['output'][i]}
-            seg_img = run_kmeans(dict_i['input'], 3)
+            seg_img = run_kmeans(dict_i['input'], 5)
             dict_i['seg_img'] = seg_img
             np.save(os.path.join(dir, '{0}.{1}'.format(id+'_'+str(i+1), ext)), dict_i)
             plt.imsave(os.path.join(dir, '{0}.{1}'.format(id+'_'+str(i+1)+'_img', 'png')), np.squeeze(dict_i['input'], axis=2))
