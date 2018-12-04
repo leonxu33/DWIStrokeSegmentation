@@ -10,7 +10,7 @@ mask = np.squeeze(data["output"], axis=2)
 print(img.shape)
 print(np.max(img))
 print(np.min(img))
-c_assn, c_cent = k_means(img, 5)
+c_assn, c_cent = k_means(img, 3)
 
 max_centroid = np.argmax(c_cent)
 img_seg_output = np.zeros(shape=(c_assn.shape[0], c_assn.shape[1]))

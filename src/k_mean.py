@@ -9,8 +9,8 @@ def k_means(input, K):
     cluster_assn = np.zeros(shape=(x_dim, y_dim))
     # initialize cluster centroids
     cluster_centroids = list(np.linspace(np.min(input), np.max(input), K))
-    print(cluster_centroids)
     # Repeat while cluster assignments don’t change
+    print('Running k-means...')
     while c_changed:
         c_changed = False
         counter += 1
@@ -29,9 +29,18 @@ def k_means(input, K):
             if not centroid_k == cluster_centroids[k]:
                 c_changed = True
                 cluster_centroids[k] = centroid_k
-        print(cluster_centroids)
     return cluster_assn, cluster_centroids
 
+def run_kmeans(img, K):
+    if len(img.shape) != 2:
+        img = np.squeeze(img, axis=2)
+    c_assn, c_cent = k_means(img, K)
+    img_seg_output = np.zeros(shape=(c_assn.shape[0], c_assn.shape[1]))
+    for i in range(img_seg_output.shape[0]):
+        for j in range(img_seg_output.shape[1]):
+            img_seg_output[i][j] = c_cent[int(c_assn[i][j])]
+    img_seg_output = np.expand_dims(img_seg_output, axis=2)
+    return img_seg_output
 
 
 
