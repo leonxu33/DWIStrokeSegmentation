@@ -19,8 +19,8 @@ if not os.path.isdir(chkpt_dir):
 
 model = transfer_FCN_Vgg16()
 
-params_generator = {'dim_x': 256,
-          'dim_y': 256,
+params_generator = {'dim_x': 224,
+          'dim_y': 224,
           'dim_z': 1,
           'dim_output': 1,
           'batch_size': batch_size,

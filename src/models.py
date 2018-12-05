@@ -8,13 +8,13 @@ from keras.losses import binary_crossentropy
 from keras.optimizers import Adam
 import os
 #
-def mean_iou(label, prediction):
-    prediction_ = tf.to_int32(prediction > 0.5)
-    score, conf_matrix = tf.metrics.mean_iou(label, prediction_, 2)
-    K.get_session().run(tf.local_variables_initializer())
-    with tf.control_dependencies([conf_matrix]):
-        score = tf.identity(score)
-    return score
+# def mean_iou(label, prediction):
+#     prediction_ = tf.to_int32(prediction > 0.5)
+#     score, conf_matrix = tf.metrics.mean_iou(label, prediction_, 2)
+#     K.get_session().run(tf.local_variables_initializer())
+#     with tf.control_dependencies([conf_matrix]):
+#         score = tf.identity(score)
+#     return score
 
 def get_weights_path_vgg16():
     TF_WEIGHTS_PATH = 'https://github.com/fchollet/deep-learning-models/releases/download/v0.1/vgg16_weights_tf_dim_ordering_tf_kernels.h5'
@@ -23,35 +23,35 @@ def get_weights_path_vgg16():
     return weights_path
 
 def transfer_FCN_Vgg16():
-    input_shape = (256, 256, 1)
+    input_shape = (224, 224, 1)
     img_input = Input(shape=input_shape)
     # Block 1
-    conv1_1 = Conv2D(64, (3, 3), activation='relu', padding='same', name='conv1_1')(img_input)
-    conv1_2 = Conv2D(64, (3, 3), activation='relu', padding='same', name='conv1_2')(conv1_1)
-    pool1 = MaxPooling2D((2, 2), strides=(2, 2), padding='same', name='pool1')(conv1_2)
+    conv1_1 = Conv2D(64, (3, 3), activation='relu', padding='same', name='conv1_1', data_format="channels_last")(img_input)
+    conv1_2 = Conv2D(64, (3, 3), activation='relu', padding='same', name='conv1_2', data_format="channels_last")(conv1_1)
+    pool1 = MaxPooling2D((2, 2), strides=(2, 2), padding='same', name='pool1', data_format="channels_last")(conv1_2)
 
     # Block 2
-    conv2_1 = Conv2D(128, (3, 3), activation='relu', padding='same', name='conv2_1')(pool1)
-    conv2_2 = Conv2D(128, (3, 3), activation='relu', padding='same', name='conv2_2')(conv2_1)
-    pool2 = MaxPooling2D((2, 2), strides=(2, 2), padding='same', name='pool2')(conv2_2)
+    conv2_1 = Conv2D(128, (3, 3), activation='relu', padding='same', name='conv2_1', data_format="channels_last")(pool1)
+    conv2_2 = Conv2D(128, (3, 3), activation='relu', padding='same', name='conv2_2', data_format="channels_last")(conv2_1)
+    pool2 = MaxPooling2D((2, 2), strides=(2, 2), padding='same', name='pool2', data_format="channels_last")(conv2_2)
 
     # Block 3
-    conv3_1 = Conv2D(256, (3, 3), activation='relu', padding='same', name='conv3_1')(pool2)
-    conv3_2 = Conv2D(256, (3, 3), activation='relu', padding='same', name='conv3_2')(conv3_1)
-    conv3_3 = Conv2D(256, (3, 3), activation='relu', padding='same', name='conv3_3')(conv3_2)
-    pool3 = MaxPooling2D((2, 2), strides=(2, 2), padding='same', name='pool3')(conv3_3)
+    conv3_1 = Conv2D(256, (3, 3), activation='relu', padding='same', name='conv3_1', data_format="channels_last")(pool2)
+    conv3_2 = Conv2D(256, (3, 3), activation='relu', padding='same', name='conv3_2', data_format="channels_last")(conv3_1)
+    conv3_3 = Conv2D(256, (3, 3), activation='relu', padding='same', name='conv3_3', data_format="channels_last")(conv3_2)
+    pool3 = MaxPooling2D((2, 2), strides=(2, 2), padding='same', name='pool3', data_format="channels_last")(conv3_3)
 
     # Block 4
-    conv4_1 = Conv2D(512, (3, 3), activation='relu', padding='same', name='conv4_1')(pool3)
-    conv4_2 = Conv2D(512, (3, 3), activation='relu', padding='same', name='conv4_2')(conv4_1)
-    conv4_3 = Conv2D(512, (3, 3), activation='relu', padding='same', name='conv4_3')(conv4_2)
-    pool4 = MaxPooling2D((2, 2), strides=(2, 2), padding='same', name='pool4')(conv4_3)
+    conv4_1 = Conv2D(512, (3, 3), activation='relu', padding='same', name='conv4_1', data_format="channels_last")(pool3)
+    conv4_2 = Conv2D(512, (3, 3), activation='relu', padding='same', name='conv4_2', data_format="channels_last")(conv4_1)
+    conv4_3 = Conv2D(512, (3, 3), activation='relu', padding='same', name='conv4_3', data_format="channels_last")(conv4_2)
+    pool4 = MaxPooling2D((2, 2), strides=(2, 2), padding='same', name='pool4', data_format="channels_last")(conv4_3)
 
     # Block 5
-    conv5_1 = Conv2D(512, (3, 3), activation='relu', padding='same', name='block5_conv1')(pool4)
-    conv5_2 = Conv2D(512, (3, 3), activation='relu', padding='same', name='block5_conv2')(conv5_1)
-    conv5_3 = Conv2D(512, (3, 3), activation='relu', padding='same', name='block5_conv3')(conv5_2)
-    pool5 = MaxPooling2D((2, 2), strides=(2, 2), padding='same', name='block5_pool')(conv5_3)
+    conv5_1 = Conv2D(512, (3, 3), activation='relu', padding='same', name='block5_conv1', data_format="channels_last")(pool4)
+    conv5_2 = Conv2D(512, (3, 3), activation='relu', padding='same', name='block5_conv2', data_format="channels_last")(conv5_1)
+    conv5_3 = Conv2D(512, (3, 3), activation='relu', padding='same', name='block5_conv3', data_format="channels_last")(conv5_2)
+    pool5 = MaxPooling2D((2, 2), strides=(2, 2), padding='same', name='block5_pool', data_format="channels_last")(conv5_3)
 
     # Convolutional layers transfered from fully-connected layers
     o = Conv2D(4096, (7, 7), activation='relu', padding='same', name='conv6', data_format="channels_last")(pool5)
@@ -105,5 +105,5 @@ def transfer_FCN_Vgg16():
     else:
         model.load_weights(weights_path, by_name=True)
         print( 'Already transformed!')
-    model.compile(loss=binary_crossentropy, optimizer=Adam(lr=0.0002), metrics=[mean_iou])
+    model.compile(loss=binary_crossentropy, optimizer=Adam(lr=0.0002), metrics=['accuracy'])
     return model

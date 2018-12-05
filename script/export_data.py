@@ -21,7 +21,7 @@ split_num = -3
 # dcm_dir = args.dcm_path
 dcm_dir = '../../24H_DWI_D3/24H_DWI_D3'
 
-invalid_set = ['119', '122', '157', '175', '220']
+invalid_set = ['119', '122', '157', '175', '220', '125', '136', '283', '326']
 reversed_set = ['112', '115', '117', '128', '133', '134', '154', '198', '211', '213', '219', '222', '224', '228', '245', '272', '281', '294', '304', '312', '313', '318', '335']
 
 if not os.path.isdir(data_dir):
@@ -45,11 +45,11 @@ def main():
     valid_set = dir_list[split_num * 2:split_num]
     training_set = dir_list[:split_num * 2]
     output_data(test_set, test_dir)
-    # output_data(valid_set, valid_dir)
-    # output_data(training_set, training_dir)
+    output_data(valid_set, valid_dir)
+    output_data(training_set, training_dir)
 
 def preprocess_data(img_arr, mask=True):
-    target_size = (256, 256)
+    target_size = (224, 224)
     img_arr = resize(img_arr, target_size)
     if mask:
         img_arr = (img_arr > np.min(img_arr)).astype(int)
