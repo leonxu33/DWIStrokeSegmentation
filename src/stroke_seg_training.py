@@ -21,15 +21,15 @@ setKerasMemory(keras_memory)
 
 model = deepEncoderDecoder(num_channel_input = 1,
                         num_channel_output = 1,
-                        img_rows = 256,
-                        img_cols = 256,
+                        img_rows = 224,
+                        img_cols = 224,
                         lr_init = 0.0002,
                         num_poolings = 3,
                         num_conv_per_pooling = 3,
                         with_bn = True, verbose=1)
 
-params_generator = {'dim_x': 256,
-          'dim_y': 256,
+params_generator = {'dim_x': 224,
+          'dim_y': 224,
           'dim_z': 1,
           'dim_output': 1,
           'batch_size': batch_size,
