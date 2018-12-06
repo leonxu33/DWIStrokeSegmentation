@@ -40,10 +40,11 @@ def main():
             dir_list.append(subdir)
     dir_list = list(set(dir_list) - set(invalid_set))
     dir_list.sort()
-    print(dir_list)
-    test_set = dir_list[split_num:]
-    valid_set = dir_list[split_num * 2:split_num]
-    training_set = dir_list[:split_num * 2]
+    # print(dir_list)
+    test_set = ['112', '124', '218']
+    valid_set =['328', '330', '331']
+    training_set = [x for x in dir_list if x not in test_set+valid_set]
+    # print(training_set)
     output_data(test_set, test_dir)
     output_data(valid_set, valid_dir)
     output_data(training_set, training_dir)

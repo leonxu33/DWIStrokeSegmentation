@@ -25,7 +25,7 @@ if not os.path.isdir(result_dir):
     os.mkdir(result_dir)
 
 for maindir, subdirlist, filelist in os.walk(test_dir, topdown=False):
-    for filename in filelist:
+    for filename in sorted(filelist):
         if ".npy" in filename.lower():
             filepath = os.path.join(maindir, filename)
             sample = np.load(filepath).item()
