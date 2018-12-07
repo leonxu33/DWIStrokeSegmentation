@@ -11,7 +11,7 @@ valid_dir = os.path.join(dir_samples, 'valid')
 ext_data = 'npy'
 chkpt_dir = '../ckpt/'
 filename_checkpoint = os.path.join(chkpt_dir, 'stroke.ckpt')
-batch_size = 32
+batch_size = 8
 keras_memory = 0.4
 
 if not os.path.isdir(chkpt_dir):
@@ -45,9 +45,10 @@ print('Fit generator...')
 history = model.fit_generator(
                     generator=training_generator,
                     steps_per_epoch=len(list_training_files)/batch_size,
-                    epochs=50,
+                    epochs=20,
                     callbacks=[model_checkpoint],
                     validation_data=validation_generator,
                     validation_steps=len(list_valid_files)/batch_size)
 
 print(history)
+
