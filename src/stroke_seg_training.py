@@ -11,7 +11,7 @@ valid_dir = os.path.join(dir_samples, 'valid')
 ext_data = 'npy'
 chkpt_dir = '../ckpt/'
 filename_checkpoint = os.path.join(chkpt_dir, 'stroke.ckpt')
-batch_size = 32
+batch_size = 8
 keras_memory = 0.4
 
 if not os.path.isdir(chkpt_dir):
