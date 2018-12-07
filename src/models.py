@@ -22,6 +22,15 @@ def get_weights_path_vgg16():
     #weights_path = '../ckpt/vgg16_weights_tf_dim_ordering_tf_kernels_notop.h5'
     return weights_path
 
+def dice_coef(y_true, y_pred):
+    y_true_f = K.flatten(y_true)
+    y_pred_f = K.flatten(y_pred)
+    intersection = K.sum(y_true_f * y_pred_f)
+    return (2. * intersection + 1.) / (K.sum(y_true_f*y_true_f) + K.sum(y_pred_f*y_pred_f) + 1.)
+
+def dice_coef_loss(y_true, y_pred):
+    return 1.-dice_coef(y_true, y_pred)
+
 def transfer_FCN_Vgg16():
     input_shape = (224, 224, 1)
     img_input = Input(shape=input_shape)
@@ -105,5 +114,5 @@ def transfer_FCN_Vgg16():
     else:
         model.load_weights(weights_path, by_name=True)
         print( 'Already transformed!')
-    model.compile(loss=binary_crossentropy, optimizer=Adam(lr=0.0002), metrics=['accuracy'])
+    model.compile(loss=dice_coef_loss, optimizer=Adam(lr=0.0002), metrics=[dice_coef])
     return model
