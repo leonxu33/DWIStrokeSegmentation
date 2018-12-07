@@ -2,8 +2,8 @@ import numpy as np
 import os
 from unet import *
 
-img_rows = 256
-img_cols = 256
+img_rows = 224
+img_cols = 224
 num_poolings = 3
 num_conv_per_pooling = 3
 lr_init = 0.002
