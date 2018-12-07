@@ -45,9 +45,10 @@ print('Fit generator...')
 history = model.fit_generator(
                     generator=training_generator,
                     steps_per_epoch=len(list_training_files)/batch_size,
-                    epochs=50,
+                    epochs=20,
                     callbacks=[model_checkpoint],
                     validation_data=validation_generator,
                     validation_steps=len(list_valid_files)/batch_size)
 
 print(history)
+
