@@ -35,20 +35,10 @@ def dice_coef(y_true, y_pred):
     y_true_f = K.flatten(y_true)
     y_pred_f = K.flatten(y_pred)
     intersection = K.sum(y_true_f * y_pred_f)
-    return (2. * intersection + 1.) / (K.sum(y_true_f*y_true_f) + K.sum(y_pred_f*y_true_f) + 1.)
+    return (2. * intersection + 1.) / (K.sum(y_true_f*y_true_f) + K.sum(y_pred_f*y_pred_f) + 1.)
 
 def dice_coef_loss(y_true, y_pred):
     return 1.-dice_coef(y_true, y_pred)
-
-# def dice_loss(y_true,y_pred):
-#     y_true = tf.to_int32(y_true > 0.5)
-#     y_pred=(tf.ceil(tf.clip(y_pred,0.7,1.0))).astype('int8')
-#     insec=tf.sum(y_true&y_pred)
-#     sum=tf.sum(y_true)+tf.sum(y_pred)
-#     if (sum):
-#         return (1.0-2.0*insec/sum)
-#     else:
-#         return 0.0
 
 # encoder-deocder
 def deepEncoderDecoder(num_channel_input=1, num_channel_output=1,
