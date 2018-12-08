@@ -18,6 +18,7 @@ def main():
         test_i_pred = np.squeeze(pred, axis=2)
         img_true = add_mask_to_image(test_i_image, test_i_true)
         img_pred = add_mask_to_image(test_i_image, np.around(test_i_pred, decimals=0))
+        plt.imsave(os.path.join(pred_dir, '{}_pred_seg.png'.format(test_files[i].split('.')[0])), np.around(test_i_pred, decimals=0))
         plt.imsave(os.path.join(pred_dir, '{}_pred_origin.png'.format(test_files[i].split('.')[0])), test_i_pred)
         plt.imsave(os.path.join(pred_dir, '{}_true.png'.format(test_files[i].split('.')[0])), img_true)
         plt.imsave(os.path.join(pred_dir, '{}_pred.png'.format(test_files[i].split('.')[0])), img_pred)
