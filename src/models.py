@@ -68,18 +68,19 @@ def transfer_FCN_Vgg16():
     # conv_out = Conv2D(2, (1, 1), activation='linear', name='predictions_1000')(fc2)
 
     ## 4 times upsamping for pool4 layer
-    conv7_4 = Conv2DTranspose(1, kernel_size=(4, 4), strides=(4, 4), use_bias=False, data_format="channels_last")(conv7)
+    conv7_4 = Conv2DTranspose(2, kernel_size=(4, 4), strides=(4, 4), use_bias=False, data_format="channels_last")(conv7)
 
     ## 2 times upsampling for pool411
-    pool4up = Conv2D(1, (1, 1), activation='relu', padding='same', name="pool4up", data_format="channels_last")(pool4)
+    pool4up = Conv2D(2, (1, 1), activation='relu', padding='same', name="pool4up", data_format="channels_last")(pool4)
     pool4up2 = Conv2DTranspose(2, kernel_size=(2, 2), strides=(2, 2), use_bias=False, data_format="channels_last")(pool4up)
-    pool3up = Conv2D(1, (1, 1), activation='relu', padding='same', name="pool3up", data_format="channels_last")(pool3)
+    pool3up = Conv2D(2, (1, 1), activation='relu', padding='same', name="pool3up", data_format="channels_last")(pool3)
 
     # vgg = Model(img_input, pool5)
     # vgg.load_weights(get_weights_path_vgg16())  ## loading VGG weights for the encoder parts of FCN8
 
     o = Add(name="add")([pool4up2, pool3up, conv7_4])
     o = Conv2DTranspose(1, kernel_size=(8, 8), strides=(8, 8), use_bias=False, data_format="channels_last")(o)
+    o = AveragePooling2D(pool_size=(4, 4), strides=(1, 1), padding="same")(o)
     o = (Activation('sigmoid'))(o)
 
     model = Model(img_input, o)
