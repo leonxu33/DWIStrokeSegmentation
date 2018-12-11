@@ -1,6 +1,8 @@
 # Acute Stroke Segmentation from DWI using FCN-8 and U-Net
 Stroke is the second-leading cause of death worldwide, but manual detection of acute stroke lesions is a labor-intensive and costly process. This project applies deep learning techniques, specifically two-dimensional U-Net and FCN-8 models, to segmentation of stroke lesions on diffusion-weighted MRI (DWI) images. 
 
+![alt text](https://github.com/leonxu0910/DWIStrokeSegmentation/blob/master/img/sample_img.png)  
+
 ### Packages Required
 Pydicom  
 Keras  
