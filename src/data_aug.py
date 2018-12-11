@@ -4,8 +4,6 @@ import matplotlib.pyplot as plt
 
 training_dir = '../data/training'
 
-temp_dir = '../temp'
-
 shift = 10
 
 for filename in os.listdir(training_dir):

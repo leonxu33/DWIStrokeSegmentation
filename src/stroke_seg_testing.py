@@ -57,6 +57,8 @@ metrics = model.evaluate(test_input, test_mask, batch_size=batch_size)
 data_test_output = model.predict(test_input, batch_size=batch_size)
 data_test_output_thres = np.around(test_input, decimals=0)
 
-np.save(os.path.join(result_dir, 'output.npy'), data_test_output)
+if not os.path.isdir(result_dir):
+    os.mkdir(result_dir)
 
+np.save(os.path.join(result_dir, 'output.npy'), data_test_output)
 print(metrics)
