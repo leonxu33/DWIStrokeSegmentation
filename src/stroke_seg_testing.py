@@ -1,6 +1,6 @@
 import numpy as np
 import os
-from models import *
+from fcn8 import *
 
 img_rows = 224
 img_cols = 224

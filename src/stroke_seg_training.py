@@ -3,7 +3,7 @@ from keras.callbacks import ModelCheckpoint
 from keras.optimizers import Adam
 import os
 from DataGenerator import *
-from models import *
+from fcn8 import *
 
 dir_samples = '../data/'
 training_dir = os.path.join(dir_samples, 'training')
