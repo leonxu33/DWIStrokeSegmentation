@@ -1,13 +1,21 @@
-# fenge
+# Acute Stroke Segmentation from DWI using FCN-8 and U-Net
+Stroke is the second-leading cause of death worldwide, but manual detection of acute stroke lesions is a labor-intensive and costly process. This project applies deep learning techniques, specifically two-dimensional U-Net and FCN-8 models, to segmentation of stroke lesions on diffusion-weighted MRI (DWI) images. 
 
-Go to src/
+### Packages Required
+Pydicom  
+Keras  
+Tensorflow  
+Scikit-image
 
-python data_aug.py
-python stroke_seg_training.py
-python stroke_seg_testing.py
+### How to
+#### Data Generation
+* To generate data, run ```python export_data.py```.  
+* To generate augmented data, run ```python data_aug.py``` after executing previous step.  
 
-Download ../data/result/output.py to local machine using scp
-scp -i ~/.ssh/google_compute_engine Owner@[IP address]:../data/result/output.py ../data/result/
+#### Training and Testing
+* To train model, run ```python stroke_seg_training.py```.
+* To test model, run ```python stroke_seg_test.py```.
+* Note: To select which model to use (FCN-8 or U-Net), checkout variable ```model``` in the file ```stroke_seg_training```. 
 
-On local machine
-python export_result.py
+#### Result Visualization
+* After done testing, run ```python export_result.py``` to output visualization of predicted segmentation. 
