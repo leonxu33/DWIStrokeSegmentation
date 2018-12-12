@@ -1,13 +1,10 @@
-
-import tensorflow as tf
 from keras.models import Model
 from keras.layers import Input, merge, Conv2D, Conv2DTranspose, BatchNormalization, Convolution2D, MaxPooling2D, UpSampling2D, Dense, concatenate
 from keras.layers.merge import add as keras_add
-from keras.callbacks import ModelCheckpoint, LearningRateScheduler
 from keras.optimizers import Adam
 from keras.losses import mean_absolute_error, mean_squared_error, binary_crossentropy
 from keras import backend as K
-from metrics import PSNRLoss
+from metrics import *
 import numpy as np
 
 # clean up
@@ -23,25 +20,8 @@ def setKerasMemory(limit=0.3):
     config.gpu_options.per_process_gpu_memory_fraction = limit
     set_session(tf_Session(config=config))
 
-def mean_iou(label, prediction):
-    prediction_ = tf.to_int32(prediction > 0.5)
-    score, conf_matrix = tf.metrics.mean_iou(label, prediction_, 2)
-    K.get_session().run(tf.local_variables_initializer())
-    with tf.control_dependencies([conf_matrix]):
-        score = tf.identity(score)
-    return score
-
-def dice_coef(y_true, y_pred):
-    y_true_f = K.flatten(y_true)
-    y_pred_f = K.flatten(y_pred)
-    intersection = K.sum(y_true_f * y_pred_f)
-    return (2. * intersection + 1.) / (K.sum(y_true_f*y_true_f) + K.sum(y_pred_f*y_pred_f) + 1.)
-
-def dice_coef_loss(y_true, y_pred):
-    return 1.-dice_coef(y_true, y_pred)
-
 # encoder-deocder
-def deepEncoderDecoder(num_channel_input=1, num_channel_output=1,
+def unet(num_channel_input=1, num_channel_output=1,
     img_rows=128, img_cols=128, y=np.array([-1,1]),
     lr_init=None, loss_function=dice_coef_loss, metrics_monitor=[dice_coef],
     num_poolings = 3, num_conv_per_pooling = 3,
@@ -124,7 +104,7 @@ def deepEncoderDecoder(num_channel_input=1, num_channel_output=1,
 
     # fit
     if lr_init is not None:
-        optimizer = Adam(lr=lr_init)#,0.001 rho=0.9, epsilon=1e-08, decay=0.0)
+        optimizer = Adam(lr=lr_init)
     else:
         optimizer = Adam()
     model.compile(loss=loss_function, optimizer=optimizer, metrics=metrics_monitor)

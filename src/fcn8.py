@@ -1,20 +1,11 @@
 from keras.models import Model
 from keras.layers import *
 from keras.applications.vgg16 import *
-import keras.backend as K
-import tensorflow as tf
 from keras.utils.data_utils import get_file
 from keras.losses import binary_crossentropy
 from keras.optimizers import Adam
+from metrics import *
 import os
-
-def mean_iou(label, prediction):
-    prediction_ = tf.to_int32(prediction > 0.5)
-    score, conf_matrix = tf.metrics.mean_iou(label, prediction_, 2)
-    K.get_session().run(tf.local_variables_initializer())
-    with tf.control_dependencies([conf_matrix]):
-        score = tf.identity(score)
-    return score
 
 def get_weights_path_vgg16():
     TF_WEIGHTS_PATH = 'https://github.com/fchollet/deep-learning-models/releases/download/v0.1/vgg16_weights_tf_dim_ordering_tf_kernels.h5'
@@ -22,17 +13,7 @@ def get_weights_path_vgg16():
     #weights_path = '../ckpt/vgg16_weights_tf_dim_ordering_tf_kernels_notop.h5'
     return weights_path
 
-def dice_coef(y_true, y_pred):
-    y_true_f = K.flatten(y_true)
-    y_pred_f = K.flatten(y_pred)
-    intersection = K.sum(y_true_f * y_pred_f)
-    return (2. * intersection + 1.) / (K.sum(y_true_f*y_true_f) + K.sum(y_pred_f*y_pred_f) + 1.)
-
-def dice_coef_loss(y_true, y_pred):
-    return 1.-dice_coef(y_true, y_pred)
-
-def transfer_FCN_Vgg16():
-    input_shape = (224, 224, 1)
+def transfer_FCN_Vgg16(input_shape = (224, 224, 1)):
     img_input = Input(shape=input_shape)
     # Block 1
     conv1_1 = Conv2D(64, (3, 3), activation='relu', padding='same', name='conv1_1', data_format="channels_last")(img_input)
@@ -65,9 +46,8 @@ def transfer_FCN_Vgg16():
     # Convolutional layers transfered from fully-connected layers
     o = Conv2D(4096, (7, 7), activation='relu', padding='same', name='conv6', data_format="channels_last")(pool5)
     conv7 = Conv2D(4096, (1, 1), activation='relu', padding='same', name='conv7', data_format="channels_last")(o)
-    # conv_out = Conv2D(2, (1, 1), activation='linear', name='predictions_1000')(fc2)
 
-    ## 4 times upsamping for conv7 layer
+    ## 4 times upsamping for pool5 layer
     conv7_4 = Conv2DTranspose(2, kernel_size=(4, 4), strides=(4, 4), use_bias=False, data_format="channels_last")(conv7)
 
     ## 2 times upsampling for pool4
@@ -77,6 +57,8 @@ def transfer_FCN_Vgg16():
 
     o = Add(name="add")([pool4up2, pool3up, conv7_4])
     o = Conv2DTranspose(1, kernel_size=(8, 8), strides=(8, 8), use_bias=False, data_format="channels_last")(o)
+
+    # Post-processing using 4x4 average pooling before activation
     o = AveragePooling2D(pool_size=(4, 4), strides=(1, 1), padding="same")(o)
     o = (Activation('sigmoid'))(o)
 

@@ -22,7 +22,7 @@ if not os.path.isdir(chkpt_dir):
 model = transfer_FCN_Vgg16()
 
 # Using U-Net model
-# model = deepEncoderDecoder(num_channel_input = 1,
+# model = unet(num_channel_input = 1,
 #                         num_channel_output = 1,
 #                         img_rows = 224,
 #                         img_cols = 224,
